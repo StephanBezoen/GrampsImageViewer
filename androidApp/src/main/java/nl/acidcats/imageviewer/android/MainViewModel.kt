@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package nl.acidcats.imageviewer.android
 
 import androidx.lifecycle.LiveData
@@ -19,8 +17,8 @@ import nl.acidcats.imageviewer.data.usecase.GetAssets
 import nl.acidcats.imageviewer.data.usecase.SelectAssets
 
 class MainViewModel(
-    @Suppress("unused", "unused") private val getAssets: GetAssets,
-    @Suppress("unused") selectAssets: SelectAssets
+    private val getAssets: GetAssets,
+    selectAssets: SelectAssets
 ) : ViewModel() {
 
     private var criteria = MutableStateFlow(
@@ -32,7 +30,7 @@ class MainViewModel(
     )
 
     val assets: LiveData<List<Asset>> = selectAssets(criteria)
-        .onEach {  }
+        .onEach { }
         .asLiveData()
 
     init {
