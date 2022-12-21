@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -38,8 +37,7 @@ class MainViewModel(
 
     init {
         viewModelScope.launch {
-            val result = getAssets(true)
-            Napier.d { "result = $result" }
+            getAssets(true)
         }
     }
 
