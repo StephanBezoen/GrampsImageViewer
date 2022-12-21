@@ -8,9 +8,9 @@ plugins {
 
 kotlin {
     android()
-    
+    ios()
+
     listOf(
-        iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
@@ -50,22 +50,17 @@ kotlin {
             }
         }
         val androidTest by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        val iosMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:$ktorVersion")
             }
         }
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
+        val iosTest by getting
+        val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
+        }
+        val iosSimulatorArm64Test by getting {
+            dependsOn(iosTest)
         }
     }
 }
