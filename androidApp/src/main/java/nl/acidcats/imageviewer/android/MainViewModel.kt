@@ -29,8 +29,11 @@ class MainViewModel(
         )
     )
 
+    private val _index = MutableStateFlow(0)
+    val index = _index.asLiveData()
+
     val assets: LiveData<List<Asset>> = selectAssets(criteria)
-        .onEach { }
+        .onEach { _index.value = 0 }
         .asLiveData()
 
     init {
@@ -38,5 +41,9 @@ class MainViewModel(
             val result = getAssets(true)
             Napier.d { "result = $result" }
         }
+    }
+
+    fun goNextImage() {
+        _index.value = _index.value + 1 % (assets.value?.size ?: 0)
     }
 }

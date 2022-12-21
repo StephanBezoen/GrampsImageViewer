@@ -5,8 +5,10 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,7 +28,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val assets by viewModel.assets.observeAsState(listOf())
-                    AssetViewer(assets = assets)
+                    val index by viewModel.index.observeAsState(0)
+                    AssetViewer(assets = assets, index = index, nextImage = { viewModel.goNextImage() })
                 }
             }
         }
@@ -43,6 +46,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     MyApplicationTheme {
-        AssetViewer(assets = listOf())
+        AssetViewer(assets = listOf(), index = 0, nextImage = {})
     }
 }
