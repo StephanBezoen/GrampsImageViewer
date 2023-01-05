@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -18,8 +20,6 @@ import nl.acidcats.imageviewer.data.model.AssetType
 
 @Composable
 fun AssetViewer(assets: List<Asset>, index: Int, nextAsset: () -> Unit) {
-    Napier.d { "index = $index" }
-
     if (assets.isNotEmpty()) {
         val errorState = remember { mutableStateOf<ErrorState>(ErrorState.None) }
 
