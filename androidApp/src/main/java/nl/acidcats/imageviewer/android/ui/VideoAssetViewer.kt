@@ -38,6 +38,7 @@ fun VideoAssetViewer(
 
     val exoPlayer = ExoPlayer.Builder(context).build().apply {
         setMediaItem(MediaItem.fromUri(Uri.parse(asset.url)))
+        repeatMode = Player.REPEAT_MODE_ONE
         prepare()
         playWhenReady = true
 
