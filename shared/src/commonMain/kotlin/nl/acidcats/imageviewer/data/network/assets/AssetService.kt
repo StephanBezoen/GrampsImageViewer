@@ -6,11 +6,11 @@ import io.ktor.client.request.*
 import nl.acidcats.imageviewer.data.network.ServiceDef
 import nl.acidcats.imageviewer.data.network.urlFromDef
 
-interface AssetService {
+internal interface AssetService {
     suspend fun getAssets(): List<AssetResponse>
 }
 
-class AssetServiceImpl(
+internal class AssetServiceImpl(
     private val client: HttpClient,
     private val serviceDef: ServiceDef,
 ) : AssetService {

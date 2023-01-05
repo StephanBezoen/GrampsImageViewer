@@ -2,7 +2,7 @@ package nl.acidcats.imageviewer.data.network
 
 import io.ktor.client.request.*
 
-fun HttpRequestBuilder.urlFromDef(
+internal fun HttpRequestBuilder.urlFromDef(
     serviceDef: ServiceDef,
     pathOverride:String? = null,
 ) =

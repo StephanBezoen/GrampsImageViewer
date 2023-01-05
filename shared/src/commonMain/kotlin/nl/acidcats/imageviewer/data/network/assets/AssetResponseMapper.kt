@@ -7,7 +7,7 @@ import nl.acidcats.imageviewer.data.model.AssetId
 import nl.acidcats.imageviewer.data.model.AssetType
 import nl.acidcats.imageviewer.data.network.ServiceDef
 
-class AssetResponseMapper(
+internal class AssetResponseMapper(
     private val stringToDateMapper: Mapper<String, Instant>,
     private val serviceDef: ServiceDef
 ): Mapper<AssetResponse, Asset> {
