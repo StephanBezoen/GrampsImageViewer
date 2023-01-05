@@ -13,8 +13,35 @@ enum class FilterBy {
 data class SelectionCriteria(
     val sortOrder: SortOrder = SortOrder.None,
     val filterby: FilterBy = FilterBy.None,
-    val types:List<AssetType>? = null
+    val types: List<AssetType>? = null
 )
 
-//enum class CustomCriteria(val criteria: SelectionCriteria(
-//)
+@Suppress("unused")
+enum class CustomCriteria(val criteria: SelectionCriteria) {
+    RANDOM_IMAGES(
+        SelectionCriteria(
+            sortOrder = SortOrder.Random,
+            filterby = FilterBy.Type,
+            types = listOf(AssetType.Image, AssetType.Gif)
+        )
+    ),
+    RANDOM_VIDEOS(
+        SelectionCriteria(
+            sortOrder = SortOrder.Random,
+            filterby = FilterBy.Type,
+            types = listOf(AssetType.Video)
+        )
+    ),
+    RANDOM(
+        SelectionCriteria(
+            sortOrder = SortOrder.Random,
+            filterby = FilterBy.None,
+        )
+    ),
+    LATEST(
+        SelectionCriteria(
+            sortOrder = SortOrder.DateDesc,
+            filterby = FilterBy.None,
+        )
+    ),
+}

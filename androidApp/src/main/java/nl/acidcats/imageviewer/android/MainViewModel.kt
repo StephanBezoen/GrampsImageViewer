@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import nl.acidcats.imageviewer.data.FilterBy
-import nl.acidcats.imageviewer.data.SelectionCriteria
-import nl.acidcats.imageviewer.data.SortOrder
+import nl.acidcats.imageviewer.data.CustomCriteria
 import nl.acidcats.imageviewer.data.model.Asset
 import nl.acidcats.imageviewer.data.usecase.GetAssets
 import nl.acidcats.imageviewer.data.usecase.SelectAssets
@@ -19,13 +17,7 @@ class MainViewModel(
     selectAssets: SelectAssets
 ) : ViewModel() {
 
-    private var criteria = MutableStateFlow(
-        SelectionCriteria(
-            sortOrder = SortOrder.Random,
-            filterby = FilterBy.None,
-//            type = AssetType.Image
-        )
-    )
+    private val criteria = MutableStateFlow(CustomCriteria.RANDOM.criteria)
 
     private val _index = MutableStateFlow(0)
     val index = _index.asLiveData()

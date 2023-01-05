@@ -25,7 +25,6 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import io.github.aakira.napier.Napier
 import nl.acidcats.imageviewer.data.model.Asset
 
 @Composable
@@ -36,38 +35,43 @@ fun VideoAssetViewer(
 ) {
     val context = LocalContext.current
 
-    val exoPlayer = ExoPlayer.Builder(context).build().apply {
-        setMediaItem(MediaItem.fromUri(Uri.parse(asset.url)))
-        repeatMode = Player.REPEAT_MODE_ONE
-        prepare()
-        playWhenReady = true
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            repeatMode = Player.REPEAT_MODE_ONE
+            prepare()
+            playWhenReady = true
 
-        addListener(object : Player.Listener {
-            override fun onPlayerError(error: PlaybackException) {
-                errorState.value = ErrorState.LoadError(
-                    url = asset.url,
-                    message = error.message ?: error.errorCodeName
-                )
-            }
-        })
+            addListener(object : Player.Listener {
+                override fun onPlayerError(error: PlaybackException) {
+                    errorState.value = ErrorState.LoadError(
+                        url = asset.url,
+                        message = error.message ?: error.errorCodeName
+                    )
+                }
+            })
+        }
     }
+    exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(asset.url)))
 
     DisposableEffect(
-        asset,
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) { onSelect() },
+                    indication = null,
+                    onClick = onSelect
+                ),
             factory = {
                 StyledPlayerView(context).apply {
                     player = exoPlayer
+                    alpha = 0.1f
                 }
             })
     ) {
-        onDispose { exoPlayer.release() }
+        onDispose {
+            exoPlayer.release()
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -80,7 +84,6 @@ fun VideoAssetViewer(
             Button(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 onClick = {
-                    Napier.d { "Next button click" }
                     onSelect()
                 }
             ) {
@@ -88,5 +91,4 @@ fun VideoAssetViewer(
             }
         }
     }
-
 }
