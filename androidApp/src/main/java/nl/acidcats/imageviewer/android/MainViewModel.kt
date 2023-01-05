@@ -11,7 +11,6 @@ import nl.acidcats.imageviewer.data.FilterBy
 import nl.acidcats.imageviewer.data.SelectionCriteria
 import nl.acidcats.imageviewer.data.SortOrder
 import nl.acidcats.imageviewer.data.model.Asset
-import nl.acidcats.imageviewer.data.model.AssetType
 import nl.acidcats.imageviewer.data.usecase.GetAssets
 import nl.acidcats.imageviewer.data.usecase.SelectAssets
 
@@ -23,8 +22,8 @@ class MainViewModel(
     private var criteria = MutableStateFlow(
         SelectionCriteria(
             sortOrder = SortOrder.Random,
-            filterby = FilterBy.Type,
-            type = AssetType.Image
+            filterby = FilterBy.None,
+//            type = AssetType.Image
         )
     )
 

@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import nl.acidcats.imageviewer.android.ui.AssetViewer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val assets by viewModel.assets.observeAsState(listOf())
                     val index by viewModel.index.observeAsState(0)
-                    AssetViewer(assets = assets, index = index, nextImage = { viewModel.goNextImage() })
+                    AssetViewer(assets = assets, index = index, nextAsset = { viewModel.goNextImage() })
                 }
             }
         }
@@ -46,6 +47,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     MyApplicationTheme {
-        AssetViewer(assets = listOf(), index = 0, nextImage = {})
+        AssetViewer(assets = listOf(), index = 0, nextAsset = {})
     }
 }

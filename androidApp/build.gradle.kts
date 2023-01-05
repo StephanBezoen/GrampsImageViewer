@@ -5,7 +5,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("plugin.serialization") version "1.7.20"
+    kotlin("plugin.serialization") version "1.8.0"
 }
 
 val apiScheme: String = gradleLocalProperties(rootDir).getProperty("apiScheme")
@@ -32,7 +32,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0"
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
     packagingOptions {
         resources {
@@ -43,6 +43,13 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=1.8.0"
+        )
     }
 }
 
@@ -73,4 +80,6 @@ dependencies {
     implementation("io.github.aakira:napier:2.6.1")
 
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+    implementation("com.google.android.exoplayer:exoplayer:2.18.2")
 }

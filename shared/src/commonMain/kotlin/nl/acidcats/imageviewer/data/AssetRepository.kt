@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalObjCRefinement::class)
+
 package nl.acidcats.imageviewer.data
 
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,16 +9,20 @@ import nl.acidcats.imageviewer.data.network.ApiResult
 import nl.acidcats.imageviewer.data.network.assets.AssetResponse
 import nl.acidcats.imageviewer.data.network.assets.AssetService
 import nl.acidcats.imageviewer.extensions.mapUsing
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
 
 interface AssetRepository {
     val assets: StateFlow<List<Asset>>
 
+    @HiddenFromObjC
     suspend fun loadAssets()
 
+    @HiddenFromObjC
     suspend fun fetchAssets(): ApiResult<Unit>
 }
 
-class AssetRepositoryImpl(
+internal class AssetRepositoryImpl(
     private val service: AssetService,
     private val assetResponseMapper: Mapper<AssetResponse, Asset>
 ) : AssetRepository {
