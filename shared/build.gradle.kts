@@ -20,7 +20,7 @@ kotlin {
 
     sourceSets {
         val ktorVersion = "2.1.1"
-        val koinVersion = "3.2.0"
+        val koinVersion = "3.3.2"
 
         val commonMain by getting {
             dependencies {
