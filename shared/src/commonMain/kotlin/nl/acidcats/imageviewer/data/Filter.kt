@@ -13,5 +13,8 @@ enum class FilterBy {
 data class SelectionCriteria(
     val sortOrder: SortOrder = SortOrder.None,
     val filterby: FilterBy = FilterBy.None,
-    val type:AssetType? = null
+    val types:List<AssetType>? = null
 )
+
+//enum class CustomCriteria(val criteria: SelectionCriteria(
+//)

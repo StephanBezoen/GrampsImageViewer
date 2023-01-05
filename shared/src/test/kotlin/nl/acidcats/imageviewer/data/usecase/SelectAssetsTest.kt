@@ -57,7 +57,7 @@ class SelectAssetsTests {
 
     @Test
     fun `test that items are filtered by type correctly`() {
-        val criteria = MutableStateFlow(SelectionCriteria(filterby = FilterBy.Type, type = AssetType.Image))
+        val criteria = MutableStateFlow(SelectionCriteria(filterby = FilterBy.Type, types = listOf(AssetType.Image)))
 
         runTest {
             selectAssets(criteria).test {
@@ -70,15 +70,29 @@ class SelectAssetsTests {
     }
 
     @Test
+    fun `test that items are filtered by multiple types correctly`() {
+        val criteria = MutableStateFlow(SelectionCriteria(filterby = FilterBy.Type, types = listOf(AssetType.Image, AssetType.Gif)))
+
+        runTest {
+            selectAssets(criteria).test {
+                val result = awaitItem()
+                assertEquals(2, result.size)
+
+                assertEquals(listOf("1", "2"), result.ids())
+            }
+        }
+    }
+
+    @Test
     fun `test that data updates when the criteria are changed`() {
-        val criteria = MutableStateFlow(SelectionCriteria(filterby = FilterBy.Type, type = AssetType.Image))
+        val criteria = MutableStateFlow(SelectionCriteria(filterby = FilterBy.Type, types = listOf(AssetType.Image)))
 
         runTest {
             selectAssets(criteria).test {
                 val imageResult = awaitItem()
                 assertEquals(listOf("1"), imageResult.ids())
 
-                criteria.value = SelectionCriteria(filterby = FilterBy.Type, type = AssetType.Video)
+                criteria.value = SelectionCriteria(filterby = FilterBy.Type, types = listOf(AssetType.Video))
                 val videoResult = awaitItem()
                 assertEquals(listOf("3"), videoResult.ids())
             }

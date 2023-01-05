@@ -18,10 +18,10 @@ class SelectAssets(
                 when (criteria.filterby) {
                     FilterBy.None -> true
                     FilterBy.Type -> {
-                        if (criteria.type == null) {
+                        if (criteria.types.isNullOrEmpty()) {
                             throw IllegalArgumentException("type property should not be null when specifying FilterBy.Type filter")
                         }
-                        asset.type == criteria.type
+                        asset.type in criteria.types
                     }
                 }
             }
