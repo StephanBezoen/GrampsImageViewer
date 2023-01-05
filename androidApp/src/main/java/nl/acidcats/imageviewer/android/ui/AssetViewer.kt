@@ -26,7 +26,7 @@ fun AssetViewer(assets: List<Asset>, index: Int, nextAsset: () -> Unit) {
         val asset = assets[index]
         Napier.d { "asset = $asset" }
         when (asset.type) {
-            AssetType.Image -> ImageAssetViewer(
+            AssetType.Image, AssetType.Gif -> ImageAssetViewer(
                 onSelect = nextAsset,
                 asset = asset,
                 errorState = errorState

@@ -6,7 +6,7 @@ import nl.acidcats.imageviewer.android.MainViewModel
 import nl.acidcats.imageviewer.data.Mapper
 import nl.acidcats.imageviewer.data.network.ServiceDef
 import nl.acidcats.imageviewer.data.network.di.ServiceDefs
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.text.SimpleDateFormat
@@ -15,12 +15,7 @@ import java.util.*
 val applicationModule = module {
     single(named<Mapper<String, Instant>>()) { dateMapper }
 
-    viewModel {
-        MainViewModel(
-            getAssets = get(),
-            selectAssets = get()
-        )
-    }
+    viewModelOf(::MainViewModel)
 }
 
 val apiConfigModule = module {

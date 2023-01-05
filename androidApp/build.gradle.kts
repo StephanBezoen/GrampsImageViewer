@@ -56,6 +56,7 @@ android {
 dependencies {
     val composeVersion = "1.3.2"
     val lifeyceVersion = "2.5.1"
+    val coilVersion = "2.2.2"
 
     implementation(project(":shared"))
 
@@ -79,7 +80,8 @@ dependencies {
 
     implementation("io.github.aakira:napier:2.6.1")
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
+    implementation("io.coil-kt:coil-gif:$coilVersion")
 
     implementation("com.google.android.exoplayer:exoplayer:2.18.2")
 }

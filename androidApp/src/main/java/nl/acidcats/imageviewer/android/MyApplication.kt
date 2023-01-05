@@ -3,6 +3,7 @@ package nl.acidcats.imageviewer.android
 import android.app.Application
 import coil.Coil
 import coil.ImageLoader
+import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
@@ -22,6 +23,9 @@ class MyApplication : Application() {
 
         Coil.setImageLoader {
             ImageLoader.Builder(this@MyApplication)
+                .components {
+                    add(ImageDecoderDecoder.Factory())
+                }
                 .diskCache {
                     DiskCache.Builder()
                         .directory(this@MyApplication.cacheDir.resolve("image_cache"))
