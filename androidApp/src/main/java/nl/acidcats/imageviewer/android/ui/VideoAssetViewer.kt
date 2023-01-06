@@ -1,6 +1,7 @@
 package nl.acidcats.imageviewer.android.ui
 
 import android.net.Uri
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,12 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -53,6 +52,8 @@ fun VideoAssetViewer(
     }
     exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(asset.url)))
 
+    val areControlsVisible = remember { mutableStateOf(false) }
+
     DisposableEffect(
         AndroidView(
             modifier = Modifier
@@ -65,7 +66,9 @@ fun VideoAssetViewer(
             factory = {
                 StyledPlayerView(context).apply {
                     player = exoPlayer
-                    alpha = 0.1f
+                    setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility ->
+                        areControlsVisible.value = (visibility == View.VISIBLE)
+                    })
                 }
             })
     ) {
@@ -74,7 +77,16 @@ fun VideoAssetViewer(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    NextButton(areControlsVisible, onSelect)
+}
+
+@Composable
+private fun NextButton(areControlsVisible: MutableState<Boolean>, onSelect: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .alpha(if (areControlsVisible.value) 1f else 0f)
+    ) {
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
