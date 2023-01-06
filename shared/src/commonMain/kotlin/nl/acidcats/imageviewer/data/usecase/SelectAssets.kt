@@ -9,6 +9,12 @@ import nl.acidcats.imageviewer.data.SelectionCriteria
 import nl.acidcats.imageviewer.data.SortOrder
 import nl.acidcats.imageviewer.data.model.Asset
 
+/**
+ * Use case to select assets from the list of available assets based on selection criteria.
+ * Both the criteria and the list of assets are expected as [Flow] instances. The result is also
+ * exposed as a [Flow] instance, so changes in both the criteria and the list of available assets
+ * will result in updates to the result flow.
+ */
 class SelectAssets(
     private val repository: AssetRepository
 ) : UseCase<StateFlow<SelectionCriteria>, Flow<List<Asset>>> {

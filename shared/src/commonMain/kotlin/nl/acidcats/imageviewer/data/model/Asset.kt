@@ -7,6 +7,9 @@ import kotlin.jvm.JvmInline
 @JvmInline
 value class AssetId(val value:String)
 
+/**
+ * Core model holding data related to a single asset
+ */
 data class Asset(
     val id:AssetId,
     val url: String,
