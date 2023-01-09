@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.acidcats.imageviewer.data.CustomCriteria
 import nl.acidcats.imageviewer.data.model.Asset
@@ -24,6 +26,11 @@ class MainViewModel(
 
     val assets: LiveData<List<Asset>> = selectAssets(criteria)
         .onEach { _index.value = 0 }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = listOf()
+        )
         .asLiveData()
 
     init {
@@ -32,7 +39,7 @@ class MainViewModel(
         }
     }
 
-    fun goNextImage() {
+    fun goNextAsset() {
         _index.value = _index.value + 1 % (assets.value?.size ?: 0)
     }
 }

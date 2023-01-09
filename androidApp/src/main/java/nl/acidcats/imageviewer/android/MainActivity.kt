@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val assets by viewModel.assets.observeAsState(listOf())
                     val index by viewModel.index.observeAsState(0)
-                    AssetViewer(assets = assets, index = index, nextAsset = { viewModel.goNextImage() })
+                    AssetViewer(assets = assets, index = index, nextAsset = { viewModel.goNextAsset() })
                 }
             }
         }
