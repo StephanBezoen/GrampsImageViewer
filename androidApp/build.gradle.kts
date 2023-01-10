@@ -39,8 +39,30 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    signingConfigs {
+        create("release") {
+            val keystoreFile: String = gradleLocalProperties(rootDir).getProperty("keystore_file")
+            val passwordForStore: String = gradleLocalProperties(rootDir).getProperty("keystore_password")
+            val keystoreKey: String = gradleLocalProperties(rootDir).getProperty("keystore_key")
+            val passwordForKey: String = gradleLocalProperties(rootDir).getProperty("key_password")
+
+            storeFile = file(keystoreFile)
+            storePassword = passwordForStore
+            keyAlias = keystoreKey
+            keyPassword = passwordForKey
+        }
+    }
     buildTypes {
         getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
+        }
+        create("benchmark") {
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
             isMinifyEnabled = false
         }
     }
@@ -84,4 +106,5 @@ dependencies {
     implementation("io.coil-kt:coil-gif:$coilVersion")
 
     implementation("com.google.android.exoplayer:exoplayer:2.18.2")
+    implementation("androidx.profileinstaller:profileinstaller:1.3.0-alpha02")
 }
