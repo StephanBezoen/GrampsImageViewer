@@ -17,8 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
@@ -38,7 +41,6 @@ fun VideoAssetViewer(
         ExoPlayer.Builder(context).build().apply {
             repeatMode = Player.REPEAT_MODE_ONE
             prepare()
-            playWhenReady = true
 
             addListener(object : Player.Listener {
                 override fun onPlayerError(error: PlaybackException) {
@@ -53,6 +55,7 @@ fun VideoAssetViewer(
     exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(asset.url)))
 
     val areControlsVisible = remember { mutableStateOf(false) }
+    val lifecycleOwner = rememberUpdatedState(newValue = LocalLifecycleOwner.current)
 
     DisposableEffect(
         AndroidView(
@@ -72,7 +75,21 @@ fun VideoAssetViewer(
                 }
             })
     ) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
+                Lifecycle.Event.ON_RESUME -> exoPlayer.play()
+                else -> {
+                    // Intentionally left empty
+                }
+            }
+        }
+        val lifecycle = lifecycleOwner.value.lifecycle
+        lifecycle.addObserver(observer)
+
         onDispose {
+            lifecycle.removeObserver(observer)
+
             exoPlayer.release()
         }
     }

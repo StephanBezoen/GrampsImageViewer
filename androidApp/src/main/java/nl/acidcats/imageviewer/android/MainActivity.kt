@@ -30,7 +30,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val assets by viewModel.assets.observeAsState(listOf())
                     val index by viewModel.index.observeAsState(0)
-                    AssetViewer(assets = assets, index = index, nextAsset = { viewModel.goNextAsset() })
+                    AssetViewer(
+                        assets = assets,
+                        index = index,
+                        nextAsset = { viewModel.goNextAsset() }
+                    )
                 }
             }
         }
@@ -42,6 +46,7 @@ class MainActivity : ComponentActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
+
 
 @Preview
 @Composable
