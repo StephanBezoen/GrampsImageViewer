@@ -19,7 +19,9 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Napier.base(DebugAntilog())
+        if (BuildConfig.DEBUG) {
+            Napier.base(DebugAntilog())
+        }
 
         Coil.setImageLoader {
             ImageLoader.Builder(this@MyApplication)
