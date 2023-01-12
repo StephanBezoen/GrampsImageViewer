@@ -8,10 +8,14 @@ plugins {
     kotlin("plugin.serialization") version "1.8.0"
 }
 
-val apiScheme: String = gradleLocalProperties(rootDir).getProperty("apiScheme")
-val apiHost: String = gradleLocalProperties(rootDir).getProperty("apiHost")
-val apiPathJson: String = gradleLocalProperties(rootDir).getProperty("apiPathJson")
-val apiPathAssets: String = gradleLocalProperties(rootDir).getProperty("apiPathAssets")
+fun getProp(key:String, props: java.util.Properties):String =
+    if (props.containsKey(key)) props.getProperty(key) else ""
+
+val localProperties = gradleLocalProperties(rootDir)
+val apiScheme: String? = localProperties.getProperty("apiScheme")
+val apiHost: String? = localProperties.getProperty("apiHost")
+val apiPathJson: String? = localProperties.getProperty("apiPathJson")
+val apiPathAssets: String? = localProperties.getProperty("apiPathAssets")
 
 android {
     namespace = "nl.acidcats.imageviewer.android"
@@ -23,10 +27,10 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "API_SCHEME", apiScheme)
-        buildConfigField("String", "API_HOST", apiHost)
-        buildConfigField("String", "API_PATH_JSON", apiPathJson)
-        buildConfigField("String", "API_PATH_ASSETS", apiPathAssets)
+        buildConfigField("String", "API_SCHEME", apiScheme ?: "\"\"")
+        buildConfigField("String", "API_HOST", apiHost ?: "\"\"")
+        buildConfigField("String", "API_PATH_JSON", apiPathJson ?: "\"\"")
+        buildConfigField("String", "API_PATH_ASSETS", apiPathAssets ?: "\"\"")
     }
     buildFeatures {
         compose = true
