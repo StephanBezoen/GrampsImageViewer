@@ -25,4 +25,4 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -Pscheme=${{secrets.API_SCHEME}} -Phost=${{secrets.API_HOST}} -PjsonPath=${{secrets.API_PATH_JSON}} -PassetsPath=${{secrets.API_PATH_ASSETS}}

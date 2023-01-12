@@ -20,16 +20,21 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        val apiScheme: String = localProperties.getProperty("apiScheme") ?: System.getenv("API_SCHEME")
-        val apiHost: String? = localProperties.getProperty("apiHost") ?: System.getenv("API_HOST")
-        val apiPathJson: String? = localProperties.getProperty("apiPathJson") ?: System.getenv("API_PATH_JSON")
-        val apiPathAssets: String? = localProperties.getProperty("apiPathAssets") ?: System.getenv("API_PATH_ASSETS")
+        val scheme:String by project
+        val host:String by project
+        val jsonPath:String by project
+        val assetsPath:String by project
+
+        val apiScheme: String = localProperties.getProperty("apiScheme") ?: "\"$scheme\""
+        val apiHost: String = localProperties.getProperty("apiHost") ?: "\"$host\""
+        val apiPathJson: String = localProperties.getProperty("apiPathJson") ?: "\"$jsonPath\""
+        val apiPathAssets: String = localProperties.getProperty("apiPathAssets") ?: "\"$assetsPath\""
         print("apiScheme: $apiScheme")
 
         buildConfigField("String", "API_SCHEME", apiScheme)
-        buildConfigField("String", "API_HOST", apiHost ?: "\"\"")
-        buildConfigField("String", "API_PATH_JSON", apiPathJson ?: "\"\"")
-        buildConfigField("String", "API_PATH_ASSETS", apiPathAssets ?: "\"\"")
+        buildConfigField("String", "API_HOST", apiHost)
+        buildConfigField("String", "API_PATH_JSON", apiPathJson)
+        buildConfigField("String", "API_PATH_ASSETS", apiPathAssets)
     }
     buildFeatures {
         compose = true
