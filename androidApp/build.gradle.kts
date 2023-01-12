@@ -8,16 +8,9 @@ plugins {
     kotlin("plugin.serialization") version "1.8.0"
 }
 
-fun getProp(key:String, props: java.util.Properties):String =
-    if (props.containsKey(key)) props.getProperty(key) else ""
-
-val localProperties = gradleLocalProperties(rootDir)
-val apiScheme: String? = localProperties.getProperty("apiScheme")
-val apiHost: String? = localProperties.getProperty("apiHost")
-val apiPathJson: String? = localProperties.getProperty("apiPathJson")
-val apiPathAssets: String? = localProperties.getProperty("apiPathAssets")
-
 android {
+    val localProperties = gradleLocalProperties(rootDir)
+
     namespace = "nl.acidcats.imageviewer.android"
     compileSdk = 33
     defaultConfig {
@@ -27,7 +20,13 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "API_SCHEME", apiScheme ?: "\"\"")
+        val apiScheme: String = localProperties.getProperty("apiScheme") ?: System.getenv("API_SCHEME")
+        val apiHost: String? = localProperties.getProperty("apiHost") ?: System.getenv("API_HOST")
+        val apiPathJson: String? = localProperties.getProperty("apiPathJson") ?: System.getenv("API_PATH_JSON")
+        val apiPathAssets: String? = localProperties.getProperty("apiPathAssets") ?: System.getenv("API_PATH_ASSETS")
+        print("apiScheme: $apiScheme")
+
+        buildConfigField("String", "API_SCHEME", apiScheme)
         buildConfigField("String", "API_HOST", apiHost ?: "\"\"")
         buildConfigField("String", "API_PATH_JSON", apiPathJson ?: "\"\"")
         buildConfigField("String", "API_PATH_ASSETS", apiPathAssets ?: "\"\"")
@@ -45,10 +44,10 @@ android {
     }
     signingConfigs {
         create("release") {
-            val keystoreFile: String = gradleLocalProperties(rootDir).getProperty("keystore_file")
-            val passwordForStore: String = gradleLocalProperties(rootDir).getProperty("keystore_password")
-            val keystoreKey: String = gradleLocalProperties(rootDir).getProperty("keystore_key")
-            val passwordForKey: String = gradleLocalProperties(rootDir).getProperty("key_password")
+            val keystoreFile: String = localProperties.getProperty("keystore_file") ?: "\"\""
+            val passwordForStore: String = localProperties.getProperty("keystore_password") ?: "\"\""
+            val keystoreKey: String = localProperties.getProperty("keystore_key") ?: "\"\""
+            val passwordForKey: String = localProperties.getProperty("key_password") ?: "\"\""
 
             storeFile = file(keystoreFile)
             storePassword = passwordForStore
