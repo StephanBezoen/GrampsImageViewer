@@ -20,21 +20,22 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        val scheme:String by project
-        val host:String by project
-        val jsonPath:String by project
-        val assetsPath:String by project
+        // command line properties
+        val propScheme: String by project
+        val propHost: String by project
+        val propJsonPath: String by project
+        val propAssetsPath: String by project
 
-        val apiScheme: String = localProperties.getProperty("apiScheme") ?: "\"$scheme\""
-        val apiHost: String = localProperties.getProperty("apiHost") ?: "\"$host\""
-        val apiPathJson: String = localProperties.getProperty("apiPathJson") ?: "\"$jsonPath\""
-        val apiPathAssets: String = localProperties.getProperty("apiPathAssets") ?: "\"$assetsPath\""
-        print("apiScheme: $apiScheme")
+        // local properties
+        val apiScheme: String? = localProperties.getProperty("apiScheme")
+        val apiHost: String? = localProperties.getProperty("apiHost")
+        val apiPathJson: String? = localProperties.getProperty("apiPathJson")
+        val apiPathAssets: String? = localProperties.getProperty("apiPathAssets")
 
-        buildConfigField("String", "API_SCHEME", apiScheme)
-        buildConfigField("String", "API_HOST", apiHost)
-        buildConfigField("String", "API_PATH_JSON", apiPathJson)
-        buildConfigField("String", "API_PATH_ASSETS", apiPathAssets)
+        buildConfigField("String", "API_SCHEME", apiScheme ?: "\"$propScheme\"")
+        buildConfigField("String", "API_HOST", apiHost ?: "\"$propHost\"")
+        buildConfigField("String", "API_PATH_JSON", apiPathJson ?: "\"$propJsonPath\"")
+        buildConfigField("String", "API_PATH_ASSETS", apiPathAssets ?: "\"$propAssetsPath\"")
     }
     buildFeatures {
         compose = true
@@ -49,15 +50,22 @@ android {
     }
     signingConfigs {
         create("release") {
-            val keystoreFile: String = localProperties.getProperty("keystore_file") ?: "\"\""
-            val passwordForStore: String = localProperties.getProperty("keystore_password") ?: "\"\""
-            val keystoreKey: String = localProperties.getProperty("keystore_key") ?: "\"\""
-            val passwordForKey: String = localProperties.getProperty("key_password") ?: "\"\""
+            // command line properties
+            val propKeystoreFile: String by project
+            val propKeystorePassword: String by project
+            val propKeystoreKey: String by project
+            val propKeyPassword: String by project
 
-            storeFile = file(keystoreFile)
-            storePassword = passwordForStore
-            keyAlias = keystoreKey
-            keyPassword = passwordForKey
+            // local properties
+            val keystoreFile: String? = localProperties.getProperty("keystore_file")
+            val passwordForStore: String? = localProperties.getProperty("keystore_password")
+            val keystoreKey: String? = localProperties.getProperty("keystore_key")
+            val passwordForKey: String? = localProperties.getProperty("key_password")
+
+            storeFile = file(keystoreFile  ?: propKeystoreFile)
+            storePassword = passwordForStore ?: propKeystorePassword
+            keyAlias = keystoreKey ?: propKeystoreKey
+            keyPassword = passwordForKey ?: propKeyPassword
         }
     }
     buildTypes {
