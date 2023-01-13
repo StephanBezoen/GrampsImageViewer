@@ -17,7 +17,7 @@ import nl.acidcats.imageviewer.data.network.ApiResult
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SelectAssetsTests {
@@ -128,16 +128,20 @@ class SelectAssetsTests {
         val criteria = MutableStateFlow(SelectionCriteria(sortOrder = SortOrder.Random))
 
         runTest {
-            var result1: List<Asset>? = null
-            var result2: List<Asset>? = null
+            val itemCounts = mutableListOf(0, 0, 0)
 
-            selectAssets(criteria).test {
-                result1 = awaitItem()
+            for (i in 0 until 10000) {
+                selectAssets(criteria).test {
+                    val assets = awaitItem()
+
+                    itemCounts[assets.indexOfFirst { asset -> asset.id.value == "1" }]++
+                }
             }
-            selectAssets(criteria).test {
-                result2 = awaitItem()
-            }
-            assertNotEquals(result1, result2)
+
+            val fact12 = itemCounts[0].toFloat() / itemCounts[1].toFloat()
+            val fact23 = itemCounts[1].toFloat() / itemCounts[2].toFloat()
+            val fact13 = itemCounts[0].toFloat() / itemCounts[2].toFloat()
+            assertTrue { fact12 - 1 < .1f && fact23 - 1 < .1f && fact13 - 1 < .1f }
         }
     }
 
