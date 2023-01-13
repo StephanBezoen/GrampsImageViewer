@@ -13,6 +13,7 @@ android {
 
     namespace = "nl.acidcats.imageviewer.android"
     compileSdk = 33
+
     defaultConfig {
         applicationId = "nl.acidcats.imageviewer.android"
         minSdk = 29
