@@ -25,11 +25,11 @@ jobs:
       - name: Build with Gradle
         run: >-
           ./gradlew build 
-          -PpropScheme=${{secrets.API_SCHEME}} 
-          -PpropHost=${{secrets.API_HOST}} 
-          -PpropJsonPath=${{secrets.API_PATH_JSON}} 
-          -PpropAssetsPath=${{secrets.API_PATH_ASSETS}} 
-          -PpropKeystoreFile=${{secrets.KEYSTORE_FILE}}
-          -PpropKeystorePassword=${{secrets.KEYSTORE_PASSWORD}}
-          -PpropKeystoreKey=${{secrets.KEYSTORE_KEY}}
-          -PpropKeyPassword=${{secrets.KEY_PASSWORD}}
+          "-PpropScheme=${{secrets.API_SCHEME}}" 
+          "-PpropHost=${{secrets.API_HOST}}" 
+          "-PpropJsonPath=${{secrets.API_PATH_JSON}}" 
+          "-PpropAssetsPath=${{secrets.API_PATH_ASSETS}}" 
+          "-PpropKeystoreFile=${{secrets.KEYSTORE_FILE}}"
+          "-PpropKeystorePassword=${{secrets.KEYSTORE_PASSWORD}}"
+          "-PpropKeystoreKey=${{secrets.KEYSTORE_KEY}}"
+          "-PpropKeyPassword=${{secrets.KEY_PASSWORD}}"
