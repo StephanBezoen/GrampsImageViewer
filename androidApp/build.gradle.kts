@@ -6,6 +6,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("plugin.serialization") version "1.8.0"
+    id("org.sonarqube") version "3.3"
 }
 
 android {
