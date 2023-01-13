@@ -50,7 +50,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
             }
         }
-        val androidTest by getting
+        val androidUnitTest by getting
         val iosMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:$ktorVersion")
