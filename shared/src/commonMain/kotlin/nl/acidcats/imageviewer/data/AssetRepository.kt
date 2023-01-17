@@ -26,13 +26,14 @@ internal class AssetRepositoryImpl(
     private val service: AssetService,
     private val assetResponseMapper: Mapper<AssetResponse, Asset>
 ) : AssetRepository {
-    override val assets = MutableStateFlow<List<Asset>>(listOf())
+    private val _assets = MutableStateFlow<List<Asset>>(listOf())
+    override val assets:StateFlow<List<Asset>> = _assets
 
     override suspend fun loadAssets() = Unit    // Nothing to do here until we have database storage
 
     override suspend fun fetchAssets(): ApiResult<Unit> {
         return getResult {
-            assets.value = service
+            _assets.value = service
                 .getAssets()
                 .mapUsing(assetResponseMapper)
         }
