@@ -3,10 +3,10 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id("com.android.application")
     kotlin("android")
-    kotlin("plugin.serialization") version "1.8.0"
-    id("org.sonarqube") version "3.3"
+    id("com.android.application")
+    kotlin("plugin.serialization")
+    id("org.sonarqube")
     id("project-report")
     id("com.vanniktech.dependency.graph.generator")
 }
@@ -99,37 +99,34 @@ android {
 }
 
 dependencies {
-    val composeVersion = "1.3.2"
-    val lifeyceVersion = "2.5.1"
-    val coilVersion = "2.2.2"
-
     implementation(project(":shared"))
 
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    implementation("androidx.compose.foundation:foundation:1.3.1")
-    implementation("androidx.compose.material:material:1.3.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
+    implementation(libraries.compose.ui)
+    implementation(libraries.compose.ui.tooling)
+    implementation(libraries.compose.ui.tooling.preview)
+    implementation(libraries.compose.runtime.livedata)
+    implementation(libraries.compose.foundation)
+    implementation(libraries.compose.material)
+    implementation(libraries.compose.activity)
 
-    implementation("io.insert-koin:koin-core:3.3.2")
-    implementation("io.insert-koin:koin-android:3.3.2")
+    implementation(libraries.koin.core)
+    implementation(libraries.koin.android)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation(libraries.kotlinx.datetime)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel:$lifeyceVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifeyceVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeyceVersion")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeyceVersion")
+    implementation(libraries.lifecycle.viewmodel)
+    implementation(libraries.lifecycle.viewmodel.compose)
+    implementation(libraries.lifecycle.viewmodel.ktx)
+    implementation(libraries.lifecycle.livedata.ktx)
 
-    implementation("io.github.aakira:napier:2.6.1")
+    implementation(libraries.napier)
 
-    implementation("io.coil-kt:coil-compose:$coilVersion")
-    implementation("io.coil-kt:coil-gif:$coilVersion")
+    implementation(libraries.coil.compose)
+    implementation(libraries.coil.gif)
 
-    implementation("com.google.android.exoplayer:exoplayer-core:2.18.2")
-    implementation("com.google.android.exoplayer:exoplayer-common:2.18.2")
-    implementation("com.google.android.exoplayer:exoplayer-ui:2.18.2")
-    implementation("androidx.profileinstaller:profileinstaller:1.3.0-alpha02")
+    implementation(libraries.exoplayer.core)
+    implementation(libraries.exoplayer.common)
+    implementation(libraries.exoplayer.ui)
+
+    implementation(libraries.profileinstaller)
 }

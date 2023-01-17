@@ -8,7 +8,6 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
-//        classpath("com.vanniktech:gradle-dependency-graph-generator-plugin:0.8.0")
     }
 }
 
@@ -16,6 +15,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+    }
+    versionCatalogs {
+        create("libraries") {
+            from(files("gradle/libs.versions.toml"))
+        }
     }
 }
 

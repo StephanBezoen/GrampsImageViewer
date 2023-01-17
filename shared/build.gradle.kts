@@ -2,9 +2,11 @@
 
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.7.20"
     id("com.android.library")
-    id("org.sonarqube") version "3.3"
+    kotlin("plugin.serialization")
+    id("org.sonarqube")
+    id("project-report")
+    id("com.vanniktech.dependency.graph.generator")
 }
 
 kotlin {
@@ -21,20 +23,19 @@ kotlin {
 
     sourceSets {
         val ktorVersion = "2.2.2"
-        val koinVersion = "3.3.2"
 
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation(libraries.ktor.client.core)
+                implementation(libraries.ktor.client.logging)
+                implementation(libraries.ktor.client.contentnegotiation)
+                implementation(libraries.ktor.serialization.json)
 
-                implementation("io.insert-koin:koin-core:$koinVersion")
+                implementation(libraries.koin.core)
 
-                implementation("io.github.aakira:napier:2.6.1")
+                implementation(libraries.napier)
 
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation(libraries.kotlinx.datetime)
             }
         }
         val commonTest by getting {
@@ -47,14 +48,14 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation(libraries.ktor.client.okhttp)
+                implementation(libraries.ktor.client.core)
             }
         }
         val androidUnitTest by getting
         val iosMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+                implementation(libraries.ktor.client.darwin)
             }
         }
         val iosTest by getting
