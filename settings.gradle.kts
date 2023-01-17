@@ -8,6 +8,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+//        classpath("com.vanniktech:gradle-dependency-graph-generator-plugin:0.8.0")
     }
 }
 

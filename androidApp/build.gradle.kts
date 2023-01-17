@@ -7,6 +7,8 @@ plugins {
     kotlin("android")
     kotlin("plugin.serialization") version "1.8.0"
     id("org.sonarqube") version "3.3"
+    id("project-report")
+    id("com.vanniktech.dependency.graph.generator")
 }
 
 android {
