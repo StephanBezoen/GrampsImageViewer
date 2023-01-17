@@ -128,6 +128,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:$coilVersion")
     implementation("io.coil-kt:coil-gif:$coilVersion")
 
-    implementation("com.google.android.exoplayer:exoplayer:2.18.2")
+    implementation("com.google.android.exoplayer:exoplayer-core:2.18.2")
+    implementation("com.google.android.exoplayer:exoplayer-common:2.18.2")
+    implementation("com.google.android.exoplayer:exoplayer-ui:2.18.2")
     implementation("androidx.profileinstaller:profileinstaller:1.3.0-alpha02")
 }
