@@ -10,6 +10,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import nl.acidcats.imageviewer.android.ui.AssetViewer
@@ -30,10 +32,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val assets by viewModel.assets.observeAsState(listOf())
                     val index by viewModel.index.observeAsState(0)
+                    val isMenuShown = remember { mutableStateOf(false) }
+
                     AssetViewer(
                         assets = assets,
                         index = index,
-                        nextAsset = { viewModel.goNextAsset() }
+                        nextAsset = { viewModel.goNextAsset() },
+                        showMenu = { isMenuShown.value = true }
                     )
                 }
             }
@@ -52,6 +57,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     MyApplicationTheme {
-        AssetViewer(assets = listOf(), index = 0, nextAsset = {})
+        AssetViewer(assets = listOf(), index = 0, nextAsset = {}, showMenu = {})
     }
 }

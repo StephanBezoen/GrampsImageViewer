@@ -1,12 +1,25 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package nl.acidcats.imageviewer.android.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import coil.compose.AsyncImage
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import nl.acidcats.imageviewer.data.model.Asset
 
 @Composable
@@ -14,13 +27,20 @@ fun ImageAssetViewer(
     asset: Asset,
     errorState: MutableState<ErrorState>,
     onSelect: () -> Unit,
+    onLongPress: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+    var job: Job? = null
+    var isLoadingShown by remember { mutableStateOf(false) }
+
     AsyncImage(
         modifier = Modifier
-            .clickable(
+            .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) { onSelect() },
+                indication = null,
+                onClick = onSelect,
+                onLongClick = onLongPress
+            ),
         model = asset.url,
         contentDescription = asset.id.value,
         alpha = 1f,
@@ -29,6 +49,28 @@ fun ImageAssetViewer(
                 url = asset.url,
                 message = error.result.throwable.message.orEmpty()
             )
+        },
+        onLoading = {
+            job = scope.launch {
+                delay(200)
+
+                isLoadingShown = true
+            }
+        },
+        onSuccess = {
+            job?.cancel()
+            job = null
+
+            isLoadingShown = false
         }
     )
+
+    AnimatedVisibility(
+        visible = isLoadingShown,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        LoadingView()
+    }
 }
+

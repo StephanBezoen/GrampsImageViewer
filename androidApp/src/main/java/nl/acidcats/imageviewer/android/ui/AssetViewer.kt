@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,7 +18,12 @@ import nl.acidcats.imageviewer.data.model.Asset
 import nl.acidcats.imageviewer.data.model.AssetType
 
 @Composable
-fun AssetViewer(assets: List<Asset>, index: Int, nextAsset: () -> Unit) {
+fun AssetViewer(
+    assets: List<Asset>,
+    index: Int,
+    nextAsset: () -> Unit,
+    showMenu: () -> Unit,
+) {
     if (assets.isNotEmpty()) {
         val errorState = remember { mutableStateOf<ErrorState>(ErrorState.None) }
 
@@ -28,6 +32,7 @@ fun AssetViewer(assets: List<Asset>, index: Int, nextAsset: () -> Unit) {
         when (asset.type) {
             AssetType.Image, AssetType.Gif -> ImageAssetViewer(
                 onSelect = nextAsset,
+                onLongPress = showMenu,
                 asset = asset,
                 errorState = errorState
             )
@@ -48,18 +53,6 @@ fun AssetViewer(assets: List<Asset>, index: Int, nextAsset: () -> Unit) {
         }
     } else {
         LoadingView()
-    }
-}
-
-@Composable
-private fun LoadingView() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = "Loading...",
-            color = MaterialTheme.colors.onBackground,
-            textAlign = TextAlign.Center,
-        )
     }
 }
 
