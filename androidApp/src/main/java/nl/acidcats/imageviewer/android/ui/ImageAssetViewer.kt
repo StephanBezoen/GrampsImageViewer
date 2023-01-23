@@ -33,6 +33,13 @@ fun ImageAssetViewer(
     var job: Job? = null
     var isLoadingShown by remember { mutableStateOf(false) }
 
+    fun hideLoader() {
+        job?.cancel()
+        job = null
+
+        isLoadingShown = false
+    }
+
     AsyncImage(
         modifier = Modifier
             .combinedClickable(
@@ -49,6 +56,7 @@ fun ImageAssetViewer(
                 url = asset.url,
                 message = error.result.throwable.message.orEmpty()
             )
+            hideLoader()
         },
         onLoading = {
             job = scope.launch {
@@ -57,12 +65,7 @@ fun ImageAssetViewer(
                 isLoadingShown = true
             }
         },
-        onSuccess = {
-            job?.cancel()
-            job = null
-
-            isLoadingShown = false
-        }
+        onSuccess = { hideLoader() }
     )
 
     AnimatedVisibility(

@@ -1,24 +1,22 @@
 package nl.acidcats.imageviewer.android.ui
 
 import android.net.Uri
-import android.view.View
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -27,6 +25,9 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.StyledPlayerView
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import nl.acidcats.imageviewer.data.model.Asset
 
 @Composable
@@ -36,6 +37,17 @@ fun VideoAssetViewer(
     onSelect: () -> Unit,
 ) {
     val context = LocalContext.current
+
+    val scope = rememberCoroutineScope()
+    var job: Job? = null
+    val isLoadingShown = remember { mutableStateOf(false) }
+
+    fun hideLoader() {
+        job?.cancel()
+        job = null
+
+        isLoadingShown.value = false
+    }
 
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -49,19 +61,31 @@ fun VideoAssetViewer(
                         message = error.message ?: error.errorCodeName
                     )
                 }
+
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    when (playbackState) {
+                        Player.STATE_BUFFERING -> {
+                            job = scope.launch {
+                                delay(200)
+
+                                isLoadingShown.value = true
+                            }
+                        }
+
+                        else -> hideLoader()
+                    }
+                }
             })
         }
     }
     exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(asset.url)))
 
-    val areControlsVisible = remember { mutableStateOf(false) }
     val lifecycleOwner = rememberUpdatedState(newValue = LocalLifecycleOwner.current)
 
     DisposableEffect(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
-                .alpha(.5f)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -70,11 +94,7 @@ fun VideoAssetViewer(
             factory = {
                 StyledPlayerView(context).apply {
                     player = exoPlayer
-                    setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility ->
-                        areControlsVisible.value = (visibility == View.VISIBLE)
-                    })
-                    controllerAutoShow = false
-                    hideController()
+                    useController = false
                 }
             })
     ) {
@@ -97,30 +117,17 @@ fun VideoAssetViewer(
         }
     }
 
-    NextButton(areControlsVisible, onSelect)
+    VideoLoadingView(isLoading = isLoadingShown)
 }
 
 @Composable
-private fun NextButton(areControlsVisible: MutableState<Boolean>, onSelect: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .alpha(if (areControlsVisible.value) 1f else 0f)
+private fun VideoLoadingView(isLoading: MutableState<Boolean>) {
+    AnimatedVisibility(
+        visible = isLoading.value,
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(16.dp)
-                .background(MaterialTheme.colors.background)
-        ) {
-            Button(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = {
-                    onSelect()
-                }
-            ) {
-                Text(text = "Next")
-            }
-        }
+        LoadingView()
     }
+
 }
