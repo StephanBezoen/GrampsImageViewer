@@ -61,6 +61,7 @@ fun VideoAssetViewer(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
+                .alpha(.5f)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -72,6 +73,8 @@ fun VideoAssetViewer(
                     setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility ->
                         areControlsVisible.value = (visibility == View.VISIBLE)
                     })
+                    controllerAutoShow = false
+                    hideController()
                 }
             })
     ) {
