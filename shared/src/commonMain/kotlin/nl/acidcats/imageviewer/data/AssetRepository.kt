@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import nl.acidcats.imageviewer.data.model.Asset
 import nl.acidcats.imageviewer.data.network.ApiResult
-import nl.acidcats.imageviewer.data.network.assets.AssetResponse
 import nl.acidcats.imageviewer.data.network.assets.AssetService
+import nl.acidcats.imageviewer.data.network.di.AssetResponseToAssetMapper
 import nl.acidcats.imageviewer.extensions.mapUsing
 import kotlin.experimental.ExperimentalObjCRefinement
 import kotlin.native.HiddenFromObjC
@@ -24,10 +24,10 @@ interface AssetRepository {
 
 internal class AssetRepositoryImpl(
     private val service: AssetService,
-    private val assetResponseMapper: Mapper<AssetResponse, Asset>
+    private val assetResponseMapper: AssetResponseToAssetMapper
 ) : AssetRepository {
     private val _assets = MutableStateFlow<List<Asset>>(listOf())
-    override val assets:StateFlow<List<Asset>> = _assets
+    override val assets: StateFlow<List<Asset>> = _assets
 
     override suspend fun loadAssets() = Unit    // Nothing to do here until we have database storage
 
