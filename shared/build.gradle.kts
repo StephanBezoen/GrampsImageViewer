@@ -4,7 +4,6 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization")
-    id("org.sonarqube")
     id("project-report")
     id("com.vanniktech.dependency.graph.generator")
 }
