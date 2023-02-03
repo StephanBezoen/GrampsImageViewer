@@ -14,7 +14,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="s">
+        tools:targetApi="s"
+        android:usesCleartextTraffic="false"
+        >
         <profileable android:shell="true" />
 
         <activity
