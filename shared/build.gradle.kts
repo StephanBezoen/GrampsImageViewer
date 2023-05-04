@@ -40,9 +40,9 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-                implementation("app.cash.turbine:turbine:0.12.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+                implementation(libraries.test.junit.jupiter.api)
+                implementation(libraries.test.turbine)
+                implementation(libraries.test.coroutines)
             }
         }
         val androidMain by getting {
@@ -74,5 +74,14 @@ android {
         minSdk = 29
         @Suppress("DEPRECATION")
         targetSdk = 33
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
 }

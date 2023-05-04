@@ -42,11 +42,12 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = libraries.versions.compose.get()
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -65,7 +66,7 @@ android {
             val keystoreKey: String? = localProperties.getProperty("keystore_key")
             val passwordForKey: String? = localProperties.getProperty("key_password")
 
-            storeFile = file(keystoreFile  ?: propKeystoreFile)
+            storeFile = file(keystoreFile ?: propKeystoreFile)
             storePassword = passwordForStore ?: propKeystorePassword
             keyAlias = keystoreKey ?: propKeystoreKey
             keyPassword = passwordForKey ?: propKeyPassword
@@ -88,11 +89,15 @@ android {
             isMinifyEnabled = false
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         freeCompilerArgs = listOf(
             "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=1.8.0"
+            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=1.8.10"
         )
     }
 }
